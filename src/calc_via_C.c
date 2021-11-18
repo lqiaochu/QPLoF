@@ -6,65 +6,51 @@
 #include <stdio.h>
 
 
-/* pre-difine something we need */
+// pre-defined some variable
 #define NR_END 1
 #define FREE_ARG char*
-
 #define TINY 1.0e-20
-void nrerror(char error_text[])
-/* Numerical Recipes standard error handler */
-{
-	fprintf(stderr,"Numerical Recipes run-time error...\n");
-	fprintf(stderr,"%s\n",error_text);
-	fprintf(stderr,"...now exiting to system...\n");
-	exit(1);
-}
 
-/* some data tpye */
+// pre-defined some functions for different data type 
 float *vector(long nl, long nh)
-/* allocate a float vector with subscript range v[nl..nh] */
+// allocate a float [nl..nh] vector 
 {
 	float *v;
-
 	v=(float *)malloc((size_t) ((nh-nl+1+NR_END)*sizeof(float)));
 	if (!v) nrerror("allocation failure in vector()");
 	return v-nl+NR_END;
 }
 
 int *ivector(long nl, long nh)
-/* allocate an int vector with subscript range v[nl..nh] */
+// allocate an int [nl..nh] vector
 {
 	int *v;
-
 	v=(int *)malloc((size_t) ((nh-nl+1+NR_END)*sizeof(int)));
 	if (!v) nrerror("allocation failure in ivector()");
 	return v-nl+NR_END;
 }
 
-   
 double *dvector(long nl, long nh)
-/* allocate a double vector with subscript range v[nl..nh] */
+// allocate a double [nl..nh] vector
 {
 	double *v;
-
 	v=(double *)malloc((size_t) ((nh-nl+1+NR_END)*sizeof(double)));
 	if (!v) nrerror("allocation failure in dvector()");
 	return v-nl+NR_END;
 }
 
 float **matrix(long nrl, long nrh, long ncl, long nch)
-/* allocate a float matrix with subscript range m[nrl..nrh][ncl..nch] */
+// allocate a float [nrl..nrh][ncl..nch] matrix
 {
 	long i, nrow=nrh-nrl+1,ncol=nch-ncl+1;
 	float **m;
 
-	/* allocate pointers to rows */
+	// allocate rows and allocate pointers to rows 
 	m=(float **) malloc((size_t)((nrow+NR_END)*sizeof(float*)));
 	if (!m) nrerror("allocation failure 1 in matrix()");
 	m += NR_END;
 	m -= nrl;
 
-	/* allocate rows and set pointers to them */
 	m[nrl]=(float *) malloc((size_t)((nrow*ncol+NR_END)*sizeof(float)));
 	if (!m[nrl]) nrerror("allocation failure 2 in matrix()");
 	m[nrl] += NR_END;
@@ -72,23 +58,21 @@ float **matrix(long nrl, long nrh, long ncl, long nch)
 
 	for(i=nrl+1;i<=nrh;i++) m[i]=m[i-1]+ncol;
 
-	/* return pointer to array of pointers to rows */
 	return m;
 }
 
 double **dmatrix(long nrl, long nrh, long ncl, long nch)
-/* allocate a double matrix with subscript range m[nrl..nrh][ncl..nch] */
+// allocate a double [nrl..nrh][ncl..nch] matrix
 {
 	long i, nrow=nrh-nrl+1,ncol=nch-ncl+1;
 	double **m;
 
-	/* allocate pointers to rows */
+	// allocate rows and allocate pointers to rows 
 	m=(double **) malloc((size_t)((nrow+NR_END)*sizeof(double*)));
 	if (!m) nrerror("allocation failure 1 in matrix()");
 	m += NR_END;
 	m -= nrl;
 
-	/* allocate rows and set pointers to them */
 	m[nrl]=(double *) malloc((size_t)((nrow*ncol+NR_END)*sizeof(double)));
 	if (!m[nrl]) nrerror("allocation failure 2 in matrix()");
 	m[nrl] += NR_END;
@@ -96,24 +80,21 @@ double **dmatrix(long nrl, long nrh, long ncl, long nch)
 
 	for(i=nrl+1;i<=nrh;i++) m[i]=m[i-1]+ncol;
 
-	/* return pointer to array of pointers to rows */
 	return m;
 }
 
 int **imatrix(long nrl, long nrh, long ncl, long nch)
-/* allocate a int matrix with subscript range m[nrl..nrh][ncl..nch] */
+// allocate a int [nrl..nrh][ncl..nch] matrix 
 {
 	long i, nrow=nrh-nrl+1,ncol=nch-ncl+1;
 	int **m;
 
-	/* allocate pointers to rows */
+	// allocate rows and allocate pointers to rows 
 	m=(int **) malloc((size_t)((nrow+NR_END)*sizeof(int*)));
 	if (!m) nrerror("allocation failure 1 in matrix()");
 	m += NR_END;
 	m -= nrl;
 
-
-	/* allocate rows and set pointers to them */
 	m[nrl]=(int *) malloc((size_t)((nrow*ncol+NR_END)*sizeof(int)));
 	if (!m[nrl]) nrerror("allocation failure 2 in matrix()");
 	m[nrl] += NR_END;
@@ -121,52 +102,62 @@ int **imatrix(long nrl, long nrh, long ncl, long nch)
 
 	for(i=nrl+1;i<=nrh;i++) m[i]=m[i-1]+ncol;
 
-	/* return pointer to array of pointers to rows */
 	return m;
 }
 
    
 void free_vector(float *v, long nl, long nh)
-/* free a float vector allocated with vector() */
+// free a float vector allocated with vector()
 {
 	free((FREE_ARG) (v+nl-NR_END));
 }
 
 void free_ivector(int *v, long nl, long nh)
-/* free an int vector allocated with ivector() */
+// free an int vector allocated with ivector() 
 {
 	free((FREE_ARG) (v+nl-NR_END));
 }
 
 void free_dvector(double *v, long nl, long nh)
-/* free a double vector allocated with dvector() */
+// free a double vector allocated with dvector() 
 {
 	free((FREE_ARG) (v+nl-NR_END));
 }
 
 void free_matrix(float **m, long nrl, long nrh, long ncl, long nch)
-/* free a float matrix allocated by matrix() */
+// free a float matrix allocated by matrix() 
 {
 	free((FREE_ARG) (m[nrl]+ncl-NR_END));
 	free((FREE_ARG) (m+nrl-NR_END));
 }
 
 void free_dmatrix(double **m, long nrl, long nrh, long ncl, long nch)
-/* free a double matrix allocated by dmatrix() */
+// free a double matrix allocated by dmatrix() 
 {
 	free((FREE_ARG) (m[nrl]+ncl-NR_END));
 	free((FREE_ARG) (m+nrl-NR_END));
 }
 
 void free_imatrix(int **m, long nrl, long nrh, long ncl, long nch)
-/* free an int matrix allocated by imatrix() */
+// free an int matrix allocated by imatrix() 
 {
 	free((FREE_ARG) (m[nrl]+ncl-NR_END));
 	free((FREE_ARG) (m+nrl-NR_END));
 }
- 
 
-// pre-define functions of mybspline_c.c
+ 
+// pre-defined error handler
+void nrerror(char error_text[])
+// Numerical Recipes standard error handler
+{
+    fprintf(stderr,"Numerical Recipes run-time error...\n");
+    fprintf(stderr,"%s\n",error_text);
+    fprintf(stderr,"...now exiting to system...\n");
+    exit(1);
+}
+
+
+// pre-define functions 
 void ludcmp(double **a, int n, int *indx, double *d)
 {
 	int i,imax,j,k;
@@ -255,6 +246,7 @@ double distance(float *x1, float *x2, int p)
 
 
 // main body of mybspline_c.c
+/*
 SEXP compbmymmc(SEXP X, SEXP Y, SEXP TAU, SEXP THETA, SEXP N, SEXP PM, SEXP KN, SEXP MAXITER, SEXP TOL, SEXP EPSILON)
 {
     // X: enlarged predictor matrix
@@ -387,20 +379,20 @@ SEXP compbmymmc(SEXP X, SEXP Y, SEXP TAU, SEXP THETA, SEXP N, SEXP PM, SEXP KN, 
     // return the result
     return(RES);
 }
-
+*/
 
 SEXP compbmmc(SEXP X, SEXP Y, SEXP TAU, SEXP THETA, SEXP N, SEXP PM, SEXP KN, SEXP MAXITER, SEXP TOL, SEXP EPSILON)
 {
-    // X: enlarged predictor matrix
-    // Y: enlarged response vector
-    // TAU: enlarged tau vector and these quantile points are the ones that we are intrersted
-    // THETA: starting point of the coef
-    // N: number of original observations
-    // PM: dimensions of enlarged predictors, equals to p*m where m is the number of basis functions
-    // KN: number of TAUs(in our paper ,KN+1 is the number of TAUs)
+    // X: predictor matrix
+    // Y: response vector
+    // TAU: quantile levels
+    // THETA: starting point of the coefficient
+    // N: number of observations
+    // PM: dimensions of enlarged predictors, equals to p*m, m is the number of basis functions
+    // KN: number of TAUs
     // MAXITER: max number of iterations
     // TOL: tolerance of convergence
-    // EPSILON: parameter used in MM
+    // EPSILON: parameter used in MM algorithm
     
     int i,j,m;   // index for loops
     int l=0;   // number of MM iterations
@@ -457,30 +449,23 @@ SEXP compbmmc(SEXP X, SEXP Y, SEXP TAU, SEXP THETA, SEXP N, SEXP PM, SEXP KN, SE
     // MM algorithm
     while(err>tol && l<maxiter)
     {
-        // save the last theta 
-        // for(i=0;i<pm;i++)   theta_old[i+1]=theta[i+1];
-        
         // compute r, denominator and v
         for(i=0;i<n*kn;i++)
         {
             // compute residual vector
             r[i+1]=y[i+1];
             for(j=0;j<pm;j++)   r[i+1]=r[i+1]-x[i+1][j+1]*theta[j+1];
-            
             // compute denominator vector
             denominator[i+1]=1.0/( epsilon + fabs(r[i+1]) );
-            
             // compute V vector
             v[i+1]= 1.0-2.0*tau[i+1]-r[i+1]*denominator[i+1];         
         }
-        
         // compute xv
         for(i=0;i<pm;i++)
         {
             xv[i+1]=0;
             for(j=0;j<n*kn;j++)   xv[i+1]=xv[i+1]+x[j+1][i+1]*v[j+1];
         }
-        
         // compute xwx
         for(i=0;i<pm;i++)
             for(j=0;j<pm;j++)
@@ -488,7 +473,6 @@ SEXP compbmmc(SEXP X, SEXP Y, SEXP TAU, SEXP THETA, SEXP N, SEXP PM, SEXP KN, SE
                 xwx[i+1][j+1]=0;
                 for(m=0;m<n*kn;m++)   xwx[i+1][j+1]=xwx[i+1][j+1] + x[m+1][i+1]*denominator[m+1]*x[m+1][j+1];
             }
-        
         // compute delta
         ludcmp(xwx,pm,index,&d);   
         lubksb(xwx,pm,index,xv);   // after this , the value of xv has become the counterpart of delta
@@ -502,7 +486,7 @@ SEXP compbmmc(SEXP X, SEXP Y, SEXP TAU, SEXP THETA, SEXP N, SEXP PM, SEXP KN, SE
         }            
         l=l+1;     
     }
-     printf("%d\t %.10f\t %.10f\t %.10f\n",l,err,tol,epsilon);
+     //printf("%d\t %.10f\t %.10f\t %.10f\n",l,err,tol,epsilon);
     
     // prepare the result
     for(i=0;i<pm;i++)   REAL(RES)[i]=theta[i+1];
@@ -518,11 +502,10 @@ SEXP compbmmc(SEXP X, SEXP Y, SEXP TAU, SEXP THETA, SEXP N, SEXP PM, SEXP KN, SE
     free_dvector(denominator,1,n*kn);
     free_ivector(index,1,pm);
     UNPROTECT(1);
-    // return the result
     return(RES);
 }
 
-
+/*
 SEXP unc(SEXP X, SEXP PHI, SEXP N, SEXP P)  // compute LOF test statistic
 {
     // X: orginal observations( only predictors )
@@ -580,17 +563,17 @@ SEXP unc(SEXP X, SEXP PHI, SEXP N, SEXP P)  // compute LOF test statistic
     return(RES);
         
 }
-
+*/
 
 
 SEXP unbc(SEXP X, SEXP X_B, SEXP PHI, SEXP PHI_B, SEXP N, SEXP P)   // compute bootstrap LOF test statistic
 {
-    // X: original observation( only predictors )
-    // X.B: bootstrap observation
-    // PHI: results of function Phi with respect to X
-    // PHI.B: results of function Phi with respect to X.B
+    // X: preditor variable
+    // X.B: bootstrap X
+    // PHI: Phi 
+    // PHI.B: Phi correspond to X.B
     // N: number of observations
-    // P: dimensions of predictor
+    // P: dimensions of covariate
     
     int i,j,k,l,m;   // index used in for loops
     int n=INTEGER(N)[0];
@@ -636,7 +619,6 @@ SEXP unbc(SEXP X, SEXP X_B, SEXP PHI, SEXP PHI_B, SEXP N, SEXP P)   // compute b
                 x2[m+1]=x_b[j+1][m+1];
             }
             dis=distance(x1,x2,p);
-            
             // update part 1 in every loop
             res1=res1+phi_b[i+1]*phi_b[j+1]*dis;
         }
@@ -682,10 +664,8 @@ SEXP unbc(SEXP X, SEXP X_B, SEXP PHI, SEXP PHI_B, SEXP N, SEXP P)   // compute b
         {
             // compute the first \sum\limits_{k=1}^n with x_i^\star and x_k
             tmp1=phi_b[i+1]*ksum[i+1];
-            
             // compute the second \sum\limist_{k=1}^n with x_k and x_j^\star
             tmp2=phi_b[j+1]*ksum[j+1];
-            
             // update part 2 in every loop
             res2=res2+tmp1+tmp2-tmp3;            
         }
@@ -694,7 +674,6 @@ SEXP unbc(SEXP X, SEXP X_B, SEXP PHI, SEXP PHI_B, SEXP N, SEXP P)   // compute b
     res=res1-res2;
     res=fabs(res);   //compute the absolute value
     
-    // prepare the result
     REAL(RES)[0]=res;
     // free the allocations
     free_matrix(x,1,n,1,p);
@@ -705,7 +684,6 @@ SEXP unbc(SEXP X, SEXP X_B, SEXP PHI, SEXP PHI_B, SEXP N, SEXP P)   // compute b
     free_vector(x1,1,p);
     free_vector(x2,1,p);
     UNPROTECT(1);
-    // return the result
     return(RES);
 }
 
