@@ -46,8 +46,9 @@ Then we first estimate the quantile regression process based on the B-splines ap
 ## prepare for approximation
 Phi_tau = gen_bspline(tau = tau, breaks = breaks, degree = degree)
 z_tau = kronecker(Phi_tau,X)
+Y = rep(y, length(tau))
 ## optimization via MM algorithm
-result = comp.B.MM.c(ztau = z_tau, Y = y, tau = tau, breaks = breaks, basis.order = degree, n = n, p = p, maxiter=200, tol=10^-8, epsilon=0.01) 
+result = comp.B.MM.c(ztau = z_tau, Y = Y, tau = tau, breaks = breaks, basis.order = degree, n = n, p = p, maxiter=200, tol=10^-8, epsilon=0.01) 
 b_hat = as.vector(result$B)			# store the estimated coefficient matrix
 e_hat = result$Residual			# store the estimated error
 
