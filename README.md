@@ -26,8 +26,8 @@ spline_kn = 5			# number of knots for B-splines
 degree = 3			# order of B-splines
 beta0 = c(1,2,1)			# initial coefficient vectors for beta
 gamma0 = rep(1,p)			# initial coefficient vectors for gamma
-B = 1000			# bootstrap times
-v_index			# index of nonlinear part
+B = 50			# bootstrap times (at least 1000 times, it's set to 50 just for testing)
+v_index	= 1			# index of nonlinear functions
 
 ## Data generalization
 e = rnorm(n,0,1)			# drawn from standard normal distribution
