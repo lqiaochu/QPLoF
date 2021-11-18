@@ -8,7 +8,7 @@ You can use `devtools` to directly install the latest version from Github
 
 ```R
 # install.packages("devtools")
-devtool::install_github("lqiaochu/QPLoF")
+devtools::install_github("lqiaochu/QPLoF")
 ```
 
 ## Example
