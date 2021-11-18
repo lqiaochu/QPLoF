@@ -67,7 +67,12 @@ To approximate the limiting distribution of the **lack-of-fit** statistic, we co
 
 ```R
 ## paired bootstrap
-ztau,Y,tau,breaks,basis.order,n,p,
+Ind<-sample(1:n,n,replace = T)
+x_boot<-as.matrix(X)[Ind,]
+y_boot<-y[Ind]
+Y_boot = rep(y_boot,length(tau))
+Phi_tau = gen_bspline(tau,breaks,degree)
+z_tau_boot = kronecker(Phi_tau,x_boot)
 B_boot<-comp.B.MM.c(ztau = z_tau_boot, Y = Y_boot, tau = tau, breaks = breaks, basis.order = degree, n = n, p = p, maxiter=200, tol=10^-8, epsilon=0.01)$B
 Phi_boot = phi(y = Y_boot, z_tau = z_tau_boot, tau = tau, b = as.vector(B_boot), n = n)
 ## calculate the boostrap test statistic
